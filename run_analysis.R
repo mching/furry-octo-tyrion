@@ -78,41 +78,16 @@ dat$subject <- factor(dat$subject)
 ## Rename the variable names (?)
 
 ## Create second tidy dataset with average of each variable for each activity and each subject
-tidy_dat <- dat
-tidy_dat <- split(tidy_dat, tidy_dat$subject) # Split data frame into list of subjects
-tidy_dat <- lapply(tidy_dat, function(x) split(x, x[2])) # Split again by activity
-
-# For each subject in the data frame, for each activity, calculate the mean
-tidy_dat <- lapply(tidy_dat, 
-                   function(x) {
-                       lapply(x, 
-                              function(y) {
-                                  lapply(y[-c(1,2)], mean))
-                              }
-                   })
-
-# By subject, unlist the inside lists. This automatically combines the activity
-# and measurement names, and makes the subject names the columns
-tidy_dat_product <- sapply(tidy_dat, unlist)
-tidy_dat_product <- data.frame(tidy_dat_product)
-head(tidy_dat_product)
-rm(dat)
+tidy_dat <- ddply(dat, .(subject, activity), numcolwise(mean))
 
 # Various data caching steps
 # save(dat, file = "dat.Rdata")
 # save(tidy_dat, file = "tidy_dat.Rdata")
 # save(tidy_dat_product, file = "tidy_dat_product.Rdata")
 # load("tidy_dat_product.Rdata")
-
-# Make rows into subjects and observations into columns by transposing the data frame
-x <- tidy_dat_product
-x <- data.frame(t(x))
-
-# add subject column
-x <- data.frame(subject = NA, x)
-x$subject <- gsub("X", "", x = rownames(x))
+# load("dat.Rdata")
 
 # write out tidy data product
-write.csv(x, file = "tidy_data.csv", row.names = F)
+write.csv(tidy_dat, file = "tidy_data.csv", row.names = F)
 
 
