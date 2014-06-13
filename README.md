@@ -35,10 +35,4 @@ The script reads in the `X_test.txt` data and labels the columns the measurement
 
 Because we are interested only in the processed measurements' means and standard deviations, the script selects and keeps only the variables with `mean` or `std` in the variable names.
 
-The resulting data has multiple rows carrying observations on the same subjects. We split the data by subject, resulting in a list of subjects, each with activity and measurement variables. We then further split the data on activity, resulting in a nested list of measurements by activity. Finally, we obtain a mean for each of the measurement variables.
-
-The result of this process is a list of subjects, each with a list of activities, each of which has a list of means. Using `sapply` and `unlist`, we combine the activities and means, resulting in a data frame where the columns are subjects with rows of means labeled with the corresponding activity. 
-
-To put subjects in the rows and means in the columns, we finally transpose the columns and add back the subject variable.
-
-The script writes out the tidy data set as a file named `tidy_data.csv`.
+Using the `ddply` function from the `plyr` package, we calculate the means for each of the measurements' mean and standard deviation variables by subject and activity. The script then writes out the tidy data set as a file named `tidy_data.csv`.
