@@ -4,3 +4,7 @@
 /dataset/*
 *.zip
 project.Rproj
+*.Rdata
+*.Rmd
+*.html
+run_analysis_small_version.R
