@@ -3,14 +3,15 @@
 ## 
 ## Michael Ching
 ## 
-## Notes: data was unzipped to a directory called dataset within this script's
-## working directory
+## Notes: zipped data was unzipped to a directory called dataset within this
+## script's working directory
+
 rm(list = ls())
 
 ## Merge datasets
 
-## Load test data
-test <- read.table("./dataset/test/X_test.txt", ) # nrows = 200)
+## Load test data, nrows = 200 allowed for faster reading in to test script repeatedly.
+test <- read.table("./dataset/test/X_test.txt", ) # nrows = 200) 
 
 # Add variable names
 features <- read.table("./dataset/features.txt")
@@ -27,7 +28,7 @@ rm(activity_test)
 subject_test <- read.table("./dataset/test/subject_test.txt", ) # nrows = 200)
 test <- data.frame(test, subject_test)
 names(test)[563] <- "subject"
-# rm(subject_test)
+rm(subject_test)
 
 ## Load train data
 train <- read.table("./dataset/train/X_train.txt", ) # nrows = 200)
@@ -47,7 +48,7 @@ rm(activity_train)
 subject_train <- read.table("./dataset/train/subject_train.txt", ) # nrows = 200)
 train <- data.frame(train, subject_train)
 names(train)[563] <- "subject"
-# rm(subject_train)
+rm(subject_train)
 
 # Bind test and train datasets together (union)
 dat <- rbind(test, train)
@@ -76,7 +77,7 @@ dat$subject <- factor(dat$subject)
 
 ## Rename the variable names (?)
 
-## Create second tidy set with average of each variable for each activity and each subject
+## Create second tidy dataset with average of each variable for each activity and each subject
 tidy_dat <- dat
 tidy_dat <- split(tidy_dat, tidy_dat$subject) # Split data frame into list of subjects
 tidy_dat <- lapply(tidy_dat, function(x) split(x, x[2])) # Split again by activity
@@ -84,7 +85,10 @@ tidy_dat <- lapply(tidy_dat, function(x) split(x, x[2])) # Split again by activi
 # For each subject in the data frame, for each activity, calculate the mean
 tidy_dat <- lapply(tidy_dat, 
                    function(x) {
-                       lapply(x, function(y) lapply(y[-c(1,2)], mean))
+                       lapply(x, 
+                              function(y) {
+                                  lapply(y[-c(1,2)], mean))
+                              }
                    })
 
 # By subject, unlist the inside lists. This automatically combines the activity
@@ -92,6 +96,23 @@ tidy_dat <- lapply(tidy_dat,
 tidy_dat_product <- sapply(tidy_dat, unlist)
 tidy_dat_product <- data.frame(tidy_dat_product)
 head(tidy_dat_product)
+rm(dat)
+
+# Various data caching steps
+# save(dat, file = "dat.Rdata")
 # save(tidy_dat, file = "tidy_dat.Rdata")
 # save(tidy_dat_product, file = "tidy_dat_product.Rdata")
+# load("tidy_dat_product.Rdata")
+
+# Make rows into subjects and observations into columns by transposing the data frame
+x <- tidy_dat_product
+x <- data.frame(t(x))
+
+# add subject column
+x <- data.frame(subject = NA, x)
+x$subject <- gsub("X", "", x = rownames(x))
+
+# write out tidy data product
+write.csv(x, file = "tidy_data.csv", row.names = F)
+
 
