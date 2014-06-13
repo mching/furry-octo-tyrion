@@ -83,8 +83,6 @@ tidy_dat <- ddply(dat, .(subject, activity), numcolwise(mean))
 # Various data caching steps
 # save(dat, file = "dat.Rdata")
 # save(tidy_dat, file = "tidy_dat.Rdata")
-# save(tidy_dat_product, file = "tidy_dat_product.Rdata")
-# load("tidy_dat_product.Rdata")
 # load("dat.Rdata")
 
 # write out tidy data product
