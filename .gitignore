@@ -8,3 +8,4 @@ project.Rproj
 *.Rmd
 *.html
 run_analysis_small_version.R
+tidy_data.csv
