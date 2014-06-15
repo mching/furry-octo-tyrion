@@ -6,7 +6,8 @@
 ## Notes: zipped data was unzipped to a directory called dataset within this
 ## script's working directory
 
-rm(list = ls())
+# Load packages
+library(plyr)
 
 ## Merge datasets
 
@@ -75,8 +76,6 @@ rm(activity_labels)
 # Make subjects into factors
 dat$subject <- factor(dat$subject)
 
-## Rename the variable names (?)
-
 ## Create second tidy dataset with average of each variable for each activity and each subject
 tidy_dat <- ddply(dat, .(subject, activity), numcolwise(mean))
 
@@ -86,6 +85,6 @@ tidy_dat <- ddply(dat, .(subject, activity), numcolwise(mean))
 # load("dat.Rdata")
 
 # write out tidy data product
-write.csv(tidy_dat, file = "tidy_data.csv", row.names = F)
+write.table(tidy_dat, file = "tidy_data.txt", row.names = F)
 
 
