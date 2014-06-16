@@ -31,8 +31,8 @@ There are also two directories
 
 To use the script, download the Dataset from the location above and unzip it into a directory called `dataset` within the working directory. 
 
-The script reads in the `X_test.txt` data and labels the columns the measurement names from the `features.txt` file. It then adds subject and activity columns to it from `subject_test.txt` and `y_test.txt` files. It then performs the same steps on the `X_train.txt` data. The script then appends the `X_train` data rows to the `X_test` rows.
+The script reads in the `X_test.txt` data and labels the columns with the measurement names from the `features.txt` file. It then adds subject and activity columns to it from `subject_test.txt` and `y_test.txt` files. The script performs the same steps on the `X_train.txt` data. 
 
-Because we are interested only in the processed measurements' means and standard deviations, the script selects and keeps only the variables with `mean` or `std` in the variable names.
+The script then appends the `X_train` data rows to the `X_test` rows to create a combined data set. Because we are interested only in the measurements' means and standard deviations, the script selects and keeps only the variables with `mean` or `std` in the variable names.
 
 Using the `ddply` function from the `plyr` package, we calculate the means for each of the measurements' mean and standard deviation variables by subject and activity. The script then writes out the tidy data set as a file named `tidy_data.csv`.
